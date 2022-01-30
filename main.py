@@ -34,7 +34,7 @@ def Setup():
     ctypes.windll.kernel32.SetConsoleTitleW(f'Skrunkly Raider v{VERSION.__version__} | By 3jm')
     os.system('cls')
     print(Fore.CYAN + '\n\n     >>' + Fore.RESET + ' Welcome to Skrunkly Raider ' + Fore.CYAN + f'v{VERSION.__version__}', Fore.RESET)
-    print(Fore.CYAN + '     >>' + Fore.RESET + ' Github Link ' + Fore.CYAN +  '>>' + Fore.CYAN + f' https://github.com/3jm/Skrunkly', Fore.RESET)
+    print(Fore.CYAN + '     >>' + Fore.RESET + ' Github Link ' + Fore.CYAN +  '>>' + Fore.CYAN + f' https://github.com/3jm/Skrunkly-Raider', Fore.RESET)
     print(Fore.CYAN + f'     >> {Fore.GREEN}{count + 1}' + Fore.RESET + ' Tokens Loaded.')
     print(Fore.CYAN + f'     >> {Fore.GREEN}{lolz + 1}' + Fore.RESET + ' Proxies Loaded.')
     print(Fore.CYAN + '\n\n     1 >>' + Fore.RESET + ' Join (Invite Code)' + Fore.RESET)
